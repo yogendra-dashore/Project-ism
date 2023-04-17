@@ -51,7 +51,17 @@ public class Validation {
 		return isError;
 	}
 	
-	public static boolean isMobNuAlpha(String hrmobno) {
+	public static boolean checkMobNolength(String hrmobno) {
+		
+		boolean isError=false;
+		if(hrmobno.length()!=10) {
+			isError=true;
+			
+		}
+		return isError;
+	}
+	
+	public static boolean isMobNoAlpha(String hrmobno) {
 		boolean isError = false;
 		if(hrmobno.matches("[0-9]+")==false) {
 			isError=true;

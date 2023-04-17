@@ -16,14 +16,17 @@ import com.filter.Validation;
 @WebServlet("/HrRegistrationController")
 public class HrRegistrationController extends HttpServlet {
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String hrname = request.getParameter("HrName");
-		String hremail = request.getParameter("HrEmail");
-		String hrpassword = request.getParameter("HrPassword"); 
-		String hrmobno = request.getParameter("HrMobileNo");
+		String hrname = request.getParameter("hrname");
+		String hremail = request.getParameter("hremail");
+		String hrpassword = request.getParameter("hrpassword"); 
+		String hrmobno = request.getParameter("hrmobno");
 		
 		boolean isError = false;
+		
 		if(Validation.isEmpty(hrname)) {
 			isError=true;
 			request.setAttribute("hrname", "Name Can't Be Empty");
@@ -79,36 +82,36 @@ public class HrRegistrationController extends HttpServlet {
 				 isError=true;
 				 request.setAttribute("hrmobno", "Mobile No Can't Be Empty");	
 			 }
-			 else if(Validation.chackLength(hrmobno))
+			 else if(Validation.checkMobNolength(hrmobno))
 			 {
 				 isError=true;
 				 request.setAttribute("hrmobno", "Mobile No Should Be 10 Digit");	
 			 }
-			 else if(Validation.isMobNuAlpha(hrmobno))
+			 else if(Validation.isMobNoAlpha(hrmobno))
 			 {
 				 isError=true;
 				 request.setAttribute("hrmobno", "Enter Valid MobNo");	
 			 }
+			 else {
+				 request.setAttribute("hrmobnovalue", hrmobno);
+			 }
+		
+		
 			 
-			 RequestDispatcher rd=null;
-			 
+		 RequestDispatcher rd=null;
 			 if(isError)
 			 {
-				 rd=request.getRequestDispatcher("AddHr.jsp");
+				
+				rd = request.getRequestDispatcher("AddHr.jsp");
 			 }
 			 else {
 				AdminDao adminDao = new AdminDao();
-				int rowaffected = adminDao.addHr(hrname,hremail,hrpassword,hrmobno);
+				adminDao.addHr(hrname,hremail,hrpassword,hrmobno);
 				
-				if(rowaffected>0)
-				{
+				rd = request.getRequestDispatcher("AdminDashBoard.jsp");
+				}
 				
-					rd=request.getRequestDispatcher("AdminDashBoard.jsp");
-				}
-				else {
-					rd=request.getRequestDispatcher("AddHr.jsp");
-				}
 				rd.forward(request, response);
 			}
 	}
-}
+

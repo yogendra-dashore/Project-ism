@@ -16,6 +16,8 @@ import com.filter.Validation;
 @WebServlet("/AdminAuthenticationController")
 public class AdminAuthenticationController extends HttpServlet {
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String email = request.getParameter("email");
@@ -29,6 +31,7 @@ public class AdminAuthenticationController extends HttpServlet {
 	    }
 	    else if(Validation.isEmailAlpha(email))
 	    {
+	    	isError=true;
 	    	request.setAttribute("email1", "Enter Valid Email ");
 	    }
 	    else {
@@ -49,26 +52,32 @@ public class AdminAuthenticationController extends HttpServlet {
 	   	{
 	    	   
 				request.setAttribute("passwordvalue", password);
-		}RequestDispatcher rd;
+		}
+		
+		RequestDispatcher rd = null;
 	    if(isError)
 	    {
 	    	rd = request.getRequestDispatcher("AdminLogin.jsp");
 	    }
 	    else {
 	    	AdminDao adminDao = new AdminDao();
+	    	AdminBean adminBean = adminDao.authenticate(email, password);
 	    	
-	    	AdminBean adminBean = adminDao.authenticate(email,password);
-         
-	    	if(adminBean==null)
-           {  
-        	   rd = request.getRequestDispatcher("AdminLogin.jsp");
-           }
-           else {
-			 request.setAttribute("adminBean", adminBean);
-         	 rd = request.getRequestDispatcher("AdminDashBoard.jsp");
+	    	if(adminBean==null) {
+	    		request.setAttribute("error",  "Please Enter Valid Credentials");
+	        	   rd = request.getRequestDispatcher("AdminLogin.jsp");
+	    	}
+	    	
+	    	 else {
+				 request.setAttribute("adminBean", adminBean);
+	         	 rd = request.getRequestDispatcher("AdminDashBoard.jsp");
+			}
+			}
+		    rd.forward(request, response);
 		}
-		}
-	    rd.forward(request, response);
-	}
-	}
 
+	}
+	    
+	    
+	    
+	    

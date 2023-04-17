@@ -4,13 +4,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Admin Login</title>
+<title>AdminLogin</title>
+<style>
+  .color{
+  color:red;'
+  }
+</style>
 </head>
 <body align="center">
 
 <%
-String email = (String)request.getAttribute("email");
-String password = (String)request.getAttribute("password");
+String email = (String)request.getAttribute("AdminEmail");
+String password = (String)request.getAttribute("AdminPass");
 %>
 <form action="AdminAuthenticationController" method="post">
 Enter Email : <input type="text" name="email" value="${emailvalue }"/>
